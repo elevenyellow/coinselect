@@ -1,8 +1,8 @@
-var utils = require('./utils')
+var utils = require("./utils")
 
 // only add inputs if they don't bust the target value (aka, exact match)
 // worst-case: O(n)
-module.exports = function blackjack (utxos, outputs, feeRate) {
+module.exports = function blackjack(utxos, outputs, feeRate) {
   if (!isFinite(utils.uintOrNaN(feeRate))) return {}
 
   var bytesAccum = utils.transactionBytes([], outputs)
@@ -19,7 +19,7 @@ module.exports = function blackjack (utxos, outputs, feeRate) {
     var inputValue = utils.uintOrNaN(input.value)
 
     // would it waste value?
-    if ((inAccum + inputValue) > (outAccum + fee + threshold)) continue
+    if (inAccum + inputValue > outAccum + fee + threshold) continue
 
     bytesAccum += inputBytes
     inAccum += inputValue

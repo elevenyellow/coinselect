@@ -1,20 +1,20 @@
-var weighted = require('weighted')
+var weighted = require("weighted")
 
-function rayleight (a, b) {
+function rayleight(a, b) {
   return a + b * Math.sqrt(-Math.log(uniform(0, 1)))
 }
 
-function uniform (min, max) {
+function uniform(min, max) {
   return min + (max - min) * Math.random()
 }
 
-function randomAddress () {
-  return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[(Math.random() * 26) >>> 0]
+function randomAddress() {
+  return "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[(Math.random() * 26) >>> 0]
 }
 
-var utils = require('../utils')
+var utils = require("../utils")
 
-function Simulation (name, algorithm, feeRate) {
+function Simulation(name, algorithm, feeRate) {
   this.algorithm = algorithm
   this.feeRate = feeRate
   this.utxoMap = {}
@@ -54,15 +54,15 @@ Simulation.generateTxos = function (n, min, max, scriptSizes) {
 
 Simulation.prototype.addUTXO = function (utxo) {
   const k = this.k + 1
-  if (this.utxoMap[k] !== undefined) throw new Error('Bad UTXO')
+  if (this.utxoMap[k] !== undefined) throw new Error("Bad UTXO")
 
   this.utxoMap[k] = Object.assign({}, utxo, { id: k })
   this.k = k
 }
 
 Simulation.prototype.useUTXO = function (utxo) {
-  if (utxo.id === undefined) throw new Error('Bad UTXO')
-  if (this.utxoMap[utxo.id] === undefined) throw new Error('Unknown UTXO')
+  if (utxo.id === undefined) throw new Error("Bad UTXO")
+  if (this.utxoMap[utxo.id] === undefined) throw new Error("Unknown UTXO")
   delete this.utxoMap[utxo.id]
 }
 
@@ -82,7 +82,11 @@ Simulation.prototype.run = function (discardFailed) {
     const outputs = this.planned[0]
     const utxos = this.getUTXOs()
 
-    const { inputs, outputs: outputs2, fee } = this.algorithm(utxos, outputs, this.feeRate)
+    const { inputs, outputs: outputs2, fee } = this.algorithm(
+      utxos,
+      outputs,
+      this.feeRate
+    )
 
     if (!inputs) {
       if (discardFailed) {
@@ -110,14 +114,16 @@ Simulation.prototype.useResult = function (inputs, outputs, fee) {
     feeRate: Math.round(this.stats.fees / this.stats.bytes)
   }
 
-  inputs.forEach(x => this.useUTXO(x))
+  inputs.forEach((x) => this.useUTXO(x))
 
   // selected outputs w/ no script are change outputs, add them to the UTXO
-  outputs.filter(x => x.script === undefined).forEach((x) => {
-    // assign it a random address
-    x.address = randomAddress()
-    this.addUTXO(x)
-  })
+  outputs
+    .filter((x) => x.script === undefined)
+    .forEach((x) => {
+      // assign it a random address
+      x.address = randomAddress()
+      this.addUTXO(x)
+    })
 }
 
 Simulation.prototype.finish = function () {

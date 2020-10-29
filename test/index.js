@@ -1,7 +1,7 @@
-var coinSelect = require('../')
-var fixtures = require('./fixtures')
-var tape = require('tape')
-var utils = require('./_utils')
+var coinSelect = require("../")
+var fixtures = require("./fixtures")
+var tape = require("tape")
+var utils = require("./_utils")
 
 fixtures.forEach(function (f) {
   tape(f.description, function (t) {

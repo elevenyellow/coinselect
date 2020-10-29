@@ -1,7 +1,7 @@
-var coinSplit = require('../split')
-var fixtures = require('./fixtures/split')
-var tape = require('tape')
-var utils = require('./_utils')
+var coinSplit = require("../split")
+var fixtures = require("./fixtures/split")
+var tape = require("tape")
+var utils = require("./_utils")
 
 fixtures.forEach(function (f) {
   tape(f.description, function (t) {

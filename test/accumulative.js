@@ -1,7 +1,7 @@
-var coinAccum = require('../accumulative')
-var fixtures = require('./fixtures/accumulative')
-var tape = require('tape')
-var utils = require('./_utils')
+var coinAccum = require("../accumulative")
+var fixtures = require("./fixtures/accumulative")
+var tape = require("tape")
+var utils = require("./_utils")
 
 fixtures.forEach(function (f) {
   tape(f.description, function (t) {

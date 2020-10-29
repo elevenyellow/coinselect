@@ -1,7 +1,7 @@
-function expand (values, indices) {
+function expand(values, indices) {
   if (indices) {
     return values.map(function (x, i) {
-      if (typeof x === 'number') return { i: i, value: x }
+      if (typeof x === "number") return { i: i, value: x }
 
       var y = { i: i }
       for (var k in x) y[k] = x[k]
@@ -10,25 +10,25 @@ function expand (values, indices) {
   }
 
   return values.map(function (x, i) {
-    return typeof x === 'object' ? x : { value: x }
+    return typeof x === "object" ? x : { value: x }
   })
 }
 
-function testValues (t, actual, expected) {
-  t.equal(typeof actual, typeof expected, 'types match')
+function testValues(t, actual, expected) {
+  t.equal(typeof actual, typeof expected, "types match")
   if (!expected) return
 
-  t.equal(actual.length, expected.length, 'lengths match')
+  t.equal(actual.length, expected.length, "lengths match")
 
   actual.forEach(function (ai, i) {
     var ei = expected[i]
 
     if (ai.i !== undefined) {
-      t.equal(ai.i, ei, 'indexes match')
-    } else if (typeof ei === 'number') {
-      t.equal(ai.value, ei, 'values match')
+      t.equal(ai.i, ei, "indexes match")
+    } else if (typeof ei === "number") {
+      t.equal(ai.value, ei, "values match")
     } else {
-      t.same(ai, ei, 'objects match')
+      t.same(ai, ei, "objects match")
     }
   })
 }

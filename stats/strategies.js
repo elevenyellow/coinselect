@@ -1,11 +1,11 @@
-const accumulative = require('../accumulative')
-const blackjack = require('../blackjack')
-const shuffle = require('fisher-yates')
-const shuffleInplace = require('fisher-yates/inplace')
-const coinSelect = require('../')
-const utils = require('../utils')
+const accumulative = require("../accumulative")
+const blackjack = require("../blackjack")
+const shuffle = require("fisher-yates")
+const shuffleInplace = require("fisher-yates/inplace")
+const coinSelect = require("../")
+const utils = require("../utils")
 
-function blackmax (utxos, outputs, feeRate) {
+function blackmax(utxos, outputs, feeRate) {
   // order by ascending value
   utxos = utxos.concat().sort((a, b) => a.value - b.value)
 
@@ -17,7 +17,7 @@ function blackmax (utxos, outputs, feeRate) {
   return accumulative(utxos, outputs, feeRate)
 }
 
-function blackmin (utxos, outputs, feeRate) {
+function blackmin(utxos, outputs, feeRate) {
   // order by descending value
   utxos = utxos.concat().sort((a, b) => b.value - a.value)
 
@@ -29,7 +29,7 @@ function blackmin (utxos, outputs, feeRate) {
   return accumulative(utxos, outputs, feeRate)
 }
 
-function blackrand (utxos, outputs, feeRate) {
+function blackrand(utxos, outputs, feeRate) {
   utxos = shuffle(utxos)
 
   // attempt to use the blackjack strategy first (no change output)
@@ -40,25 +40,25 @@ function blackrand (utxos, outputs, feeRate) {
   return accumulative(utxos, outputs, feeRate)
 }
 
-function maximal (utxos, outputs, feeRate) {
+function maximal(utxos, outputs, feeRate) {
   utxos = utxos.concat().sort((a, b) => a.value - b.value)
 
   return accumulative(utxos, outputs, feeRate)
 }
 
-function minimal (utxos, outputs, feeRate) {
+function minimal(utxos, outputs, feeRate) {
   utxos = utxos.concat().sort((a, b) => b.value - a.value)
 
   return accumulative(utxos, outputs, feeRate)
 }
 
-function FIFO (utxos, outputs, feeRate) {
+function FIFO(utxos, outputs, feeRate) {
   utxos = utxos.concat().reverse()
 
   return accumulative(utxos, outputs, feeRate)
 }
 
-function proximal (utxos, outputs, feeRate) {
+function proximal(utxos, outputs, feeRate) {
   const outAccum = outputs.reduce((a, x) => a + x.value, 0)
 
   utxos = utxos.concat().sort((a, b) => {
@@ -72,13 +72,13 @@ function proximal (utxos, outputs, feeRate) {
 }
 
 // similar to bitcoind
-function random (utxos, outputs, feeRate) {
+function random(utxos, outputs, feeRate) {
   utxos = shuffle(utxos)
 
   return accumulative(utxos, outputs, feeRate)
 }
 
-function bestof (utxos, outputs, feeRate) {
+function bestof(utxos, outputs, feeRate) {
   let n = 100
   const utxosCopy = utxos.concat()
   let best = { fee: Infinity }
@@ -97,11 +97,11 @@ function bestof (utxos, outputs, feeRate) {
   return best
 }
 
-function utxoScore (x, feeRate) {
-  return x.value - (feeRate * utils.inputBytes(x))
+function utxoScore(x, feeRate) {
+  return x.value - feeRate * utils.inputBytes(x)
 }
 
-function privet (utxos, outputs, feeRate) {
+function privet(utxos, outputs, feeRate) {
   const txosMap = {}
   utxos.forEach((txo) => {
     if (!txosMap[txo.address]) {
@@ -119,7 +119,10 @@ function privet (utxos, outputs, feeRate) {
     txosMap[address].value = txosMap[address].reduce((a, x) => a + x.value, 0)
   }
 
-  utxos = [].concat.apply([], Object.keys(txosMap).map(x => txosMap[x]))
+  utxos = [].concat.apply(
+    [],
+    Object.keys(txosMap).map((x) => txosMap[x])
+  )
 
   // only use accumulative strategy
   return accumulative(utxos, outputs, feeRate)
