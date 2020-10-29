@@ -39,10 +39,12 @@
     "coverage": "nyc --check-coverage --branches 100 --functions 100 tape test/*.js",
     "standard": "standard",
     "test": "npm run standard && npm run unit",
-    "unit": "tape test/*.js"
+    "unit": "tape test/*.js",
+    "pretty": "prettier --write \"./**/*.{js,json}\""
   },
   "devDependencies": {
     "nyc": "^15.0.0",
+    "prettier": "^2.1.2",
     "standard": "*",
     "tape": "^4.5.1"
   },
