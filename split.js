@@ -29,7 +29,8 @@ module.exports = function split(utxos, outputs, feeRate) {
   if (
     !outputs.every(function (x) {
       return (
-        x.value !== undefined || splitValue > utils.dustThreshold(x, feeRate)
+        // x.value !== undefined || splitValue > utils.dustThreshold(x, feeRate)
+        x.value !== undefined || splitValue > 0
       )
     })
   )
